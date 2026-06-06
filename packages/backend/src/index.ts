@@ -6,6 +6,8 @@ import { connectMongo } from "./lib/mongo";
 import authRouter from "./modules/auth/auth.router";
 import categoryRouter from "./modules/categories/category.router";
 import transactionRouter from "./modules/transactions/transaction.router";
+import budgetRouter from "./modules/budgets/budget.router";
+import goalRouter from "./modules/goals/goal.router";
 
 dotenv.config({ path: "../../.env" });
 
@@ -23,6 +25,8 @@ app.get("/api/v1/health", (_req, res) => {
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/transactions", transactionRouter);
+app.use("/api/v1/budgets", budgetRouter);
+app.use("/api/v1/goals", goalRouter);
 
 async function start() {
   await connectMongo();
