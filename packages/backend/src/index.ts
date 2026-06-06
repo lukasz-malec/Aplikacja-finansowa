@@ -10,6 +10,8 @@ import budgetRouter from "./modules/budgets/budget.router";
 import goalRouter from "./modules/goals/goal.router";
 import analyticsRouter from "./modules/analytics/analytics.router";
 import advisorRouter from "./modules/advisor/advisor.router";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./lib/swagger";
 
 dotenv.config({ path: "../../.env" });
 
@@ -19,6 +21,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api/v1/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });

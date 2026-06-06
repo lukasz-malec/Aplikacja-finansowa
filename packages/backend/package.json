@@ -23,7 +23,9 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.3",
     "openai": "^6.42.0",
-    "simple-statistics": "^7.9.0"
+    "simple-statistics": "^7.9.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -32,6 +34,8 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "prisma": "^5.22.0",
     "tsx": "^4.22.4"
   }
