@@ -9,6 +9,7 @@ import transactionRouter from "./modules/transactions/transaction.router";
 import budgetRouter from "./modules/budgets/budget.router";
 import goalRouter from "./modules/goals/goal.router";
 import analyticsRouter from "./modules/analytics/analytics.router";
+import advisorRouter from "./modules/advisor/advisor.router";
 
 dotenv.config({ path: "../../.env" });
 
@@ -29,6 +30,7 @@ app.use("/api/v1/transactions", transactionRouter);
 app.use("/api/v1/budgets", budgetRouter);
 app.use("/api/v1/goals", goalRouter);
 app.use("/api/v1/analytics", analyticsRouter);
+app.use("/api/v1/advisor", advisorRouter);
 
 async function start() {
   await connectMongo();
