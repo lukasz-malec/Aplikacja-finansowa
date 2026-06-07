@@ -6,6 +6,10 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import CategoriesPage from "./pages/CategoriesPage";
+import BudgetsPage from "./pages/BudgetsPage";
+import GoalsPage from "./pages/GoalsPage";
+import AdvisorPage from "./pages/AdvisorPage";
+
 
 const queryClient = new QueryClient();
 
@@ -20,6 +24,9 @@ export default function App() {
               <Route path="/" element={<DashboardPage />} />
               <Route path="/transactions" element={<TransactionsPage />} />
               <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/budgets" element={<BudgetsPage />} />
+              <Route path="/goals" element={<GoalsPage />} />
+              <Route path="/advisor" element={<AdvisorPage />} />
             </Route>
           </Routes>
         </AuthProvider>
