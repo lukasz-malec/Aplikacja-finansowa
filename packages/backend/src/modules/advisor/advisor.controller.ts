@@ -7,6 +7,7 @@ export async function advise(req: AuthRequest, res: Response): Promise<void> {
     const targetSaving = req.query.targetSaving
       ? parseFloat(req.query.targetSaving as string)
       : undefined;
+    const question = req.query.question as string | undefined;
 
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
@@ -14,7 +15,7 @@ export async function advise(req: AuthRequest, res: Response): Promise<void> {
       Connection: "keep-alive",
     });
 
-    const stream = streamAdvice({ userId: req.userId!, targetSaving });
+    const stream = streamAdvice({ userId: req.userId!, targetSaving, question });
 
     for await (const chunk of stream) {
       res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`);

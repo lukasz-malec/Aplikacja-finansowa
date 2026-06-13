@@ -11,6 +11,7 @@ const openai = new OpenAI({
 interface AdvisorContext {
   userId: string;
   targetSaving?: number;
+  question?: string;
 }
 
 async function buildPromptContext(userId: string, targetSaving?: number) {
@@ -64,29 +65,35 @@ ${context.categorySpending.map((c) => `- ${c.categoryName}: ${c.monthlyAverage} 
 
   if (context.goals.length > 0) {
     prompt += `\n\nMOJE CELE:
-${context.goals.map((g: typeof context.goals[number]) => `- ${g.name}: ${g.current}/${g.target} PLN (deadline: ${g.deadline})`).join("\n")}`;
+    ${context.goals.map((g: typeof context.goals[number]) => `- ${g.name}: ${g.current}/${g.target} PLN (deadline: ${g.deadline})`).join("\n")}`;
   }
 
   if (context.savingsPlan) {
-    prompt += `\n\nPLAN OSZCZĘDNOŚCI (obliczony):
-${context.savingsPlan.recommendations.map((r) => `- ${r.categoryName}: ciąć ${r.suggestedCut} PLN (z ${r.currentAmount} na ${r.newAmount})`).join("\n")}
-Łączne oszczędności: ${context.savingsPlan.totalSaved} PLN
-Cel osiągnięty: ${context.savingsPlan.targetReached ? "TAK" : "NIE, brakuje " + context.savingsPlan.shortfall + " PLN"}`;
+      prompt += `\n\nPLAN OSZCZĘDNOŚCI (obliczony):
+  ${context.savingsPlan.recommendations.map((r: typeof context.savingsPlan.recommendations[number]) => `- ${r.categoryName}: ciąć ${r.suggestedCut} PLN (z ${r.currentAmount} na ${r.newAmount})`).join("\n")}
+  Łączne oszczędności: ${context.savingsPlan.totalSaved} PLN
+  Cel osiągnięty: ${context.savingsPlan.targetReached ? "TAK" : "NIE, brakuje " + context.savingsPlan.shortfall + " PLN"}`;
+    }
+
+    return prompt;
   }
-
-  prompt += "\n\nPrzeanalizuj moje finanse i daj mi konkretne porady. Co mogę poprawić? Gdzie widzisz ryzyko?";
-
-  return prompt;
-}
 
 export async function* streamAdvice(context: AdvisorContext): AsyncGenerator<string> {
   const promptContext = await buildPromptContext(context.userId, context.targetSaving);
+
+  let userMessage = buildUserPrompt(promptContext);
+
+  if (context.question) {
+    userMessage += `\n\nMoje konkretne pytanie: ${context.question}`;
+  } else {
+    userMessage += "\n\nPrzeanalizuj moje finanse i daj mi konkretne porady. Co mogę poprawić? Gdzie widzisz ryzyko?";
+  }
 
   const stream = await openai.chat.completions.create({
     model: "llama3.2",
     messages: [
       { role: "system", content: buildSystemPrompt() },
-      { role: "user", content: buildUserPrompt(promptContext) },
+      { role: "user", content: userMessage },
     ],
     stream: true,
     max_tokens: 1500,
