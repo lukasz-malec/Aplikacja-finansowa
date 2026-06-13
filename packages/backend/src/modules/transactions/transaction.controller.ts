@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import type { AuthRequest } from "../../middleware/auth";
 import { createTransaction, deleteTransaction, listTransactions, updateTransaction } from "./transaction.service";
+import { transactionsCreated } from "../../lib/metrics";
 
 export async function list(req: AuthRequest, res: Response): Promise<void> {
   try {
@@ -25,6 +26,7 @@ export async function create(req: AuthRequest, res: Response): Promise<void> {
       return;
     }
     const transaction = await createTransaction(req.userId!, { amount, type, description, date, categoryId });
+    transactionsCreated.inc({ type });
     res.status(201).json({ transaction });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to create transaction";

@@ -1,9 +1,13 @@
 import type { Response } from "express";
 import type { AuthRequest } from "../../middleware/auth";
 import { getQuickAnalysis, streamAdvice } from "./advisor.service";
+import { advisorRequests, advisorDuration } from "../../lib/metrics";
 
 export async function advise(req: AuthRequest, res: Response): Promise<void> {
+  const startTime = Date.now(); 
   try {
+    advisorRequests.inc();
+    // const startTime = Date.now();
     const targetSaving = req.query.targetSaving
       ? parseFloat(req.query.targetSaving as string)
       : undefined;
@@ -28,6 +32,8 @@ export async function advise(req: AuthRequest, res: Response): Promise<void> {
       res.status(500).json({ error: "Failed to generate advice" });
     } else {
       res.write(`data: ${JSON.stringify({ error: "Stream interrupted" })}\n\n`);
+      advisorDuration.observe((Date.now() - startTime) / 1000);
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
       res.end();
     }
   }
