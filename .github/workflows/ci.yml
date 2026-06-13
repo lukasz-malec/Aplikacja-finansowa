@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
+  test-backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: budget_user
+          POSTGRES_PASSWORD: budget_pass
+          POSTGRES_DB: budget_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      mongo:
+        image: mongo:7
+        env:
+          MONGO_INITDB_ROOT_USERNAME: budget_user
+          MONGO_INITDB_ROOT_PASSWORD: budget_pass
+        ports:
+          - 27017:27017
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        working-directory: packages/backend
+        run: npx prisma generate
+
+      - name: Run migrations
+        working-directory: packages/backend
+        env:
+          DATABASE_URL: postgresql://budget_user:budget_pass@localhost:5432/budget_db
+        run: npx prisma migrate deploy
+
+      - name: Run tests
+        working-directory: packages/backend
+        env:
+          DATABASE_URL: postgresql://budget_user:budget_pass@localhost:5432/budget_db
+          MONGO_URL: mongodb://budget_user:budget_pass@localhost:27017/budget_db?authSource=admin
+          JWT_SECRET: test-secret
+        run: pnpm test
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        working-directory: packages/frontend
+        run: pnpm build
