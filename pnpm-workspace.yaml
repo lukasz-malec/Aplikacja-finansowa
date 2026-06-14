@@ -7,3 +7,4 @@ allowBuilds:
   bcrypt: false
   esbuild: true
   prisma: false
+  unrs-resolver: true
