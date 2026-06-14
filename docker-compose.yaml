@@ -24,6 +24,30 @@ services:
     volumes:
       - mongo_data:/var/lib/mongodb/data
 
+  backend:
+    build: ./packages/backend
+    container_name: budget-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://budget_user:budget_pass@postgres:5432/budget_db
+      MONGO_URL: mongodb://budget_user:budget_pass@mongo:27017/budget_db?authSource=admin
+      JWT_SECRET: super-secret-key-change-in-production
+      PORT: 3000
+    depends_on:
+      - postgres
+      - mongo
+
+  frontend:
+    build: ./packages/frontend
+    container_name: budget-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
   prometheus:
     image: prom/prometheus
     container_name: budget-prometheus
@@ -32,8 +56,6 @@ services:
       - "9090:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
   grafana:
     image: grafana/grafana

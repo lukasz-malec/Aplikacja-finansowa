@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, Legend, AreaChart, Area,
+  PieChart, Pie, Cell, Legend, AreaChart, Area,
 } from "recharts";
 import { TrendingUp, TrendingDown, Wallet, Plus, X, Eye, EyeOff } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
