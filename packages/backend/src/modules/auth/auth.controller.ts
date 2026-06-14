@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
-import { loginUser, registerUser } from "./auth.service.js";
-import type { AuthRequest } from "../../middleware/auth.js";
+import { loginUser, registerUser } from "./auth.service";
+import type { AuthRequest } from "../../middleware/auth";
+import { prisma } from "../../lib/prisma";
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
@@ -57,5 +58,13 @@ export async function logout(_req: Request, res: Response): Promise<void> {
 }
 
 export async function me(req: AuthRequest, res: Response): Promise<void> {
-  res.json({ userId: req.userId });
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId },
+    select: { id: true, email: true, name: true },
+  });
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+  res.json(user);
 }

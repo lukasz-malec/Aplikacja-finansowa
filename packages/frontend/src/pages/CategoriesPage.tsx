@@ -6,7 +6,6 @@ import { api } from "../lib/api";
 interface Category {
   _id: string;
   name: string;
-  icon: string;
   color: string;
   type: "income" | "expense";
   isProtected: boolean;
@@ -16,7 +15,7 @@ export default function CategoriesPage() {
   const queryClient = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", icon: "📦", color: "#3b82f6", type: "expense" as "income" | "expense" });
+  const [form, setForm] = useState({ name: "", color: "#3b82f6", type: "expense" as "income" | "expense" });
 
   const { data, isLoading } = useQuery({
     queryKey: ["categories"],
@@ -40,13 +39,13 @@ export default function CategoriesPage() {
   });
 
   function resetForm() {
-    setForm({ name: "", icon: "📦", color: "#3b82f6", type: "expense" });
+    setForm({ name: "", color: "#3b82f6", type: "expense" });
     setShowForm(false);
     setEditingId(null);
   }
 
   function startEdit(c: Category) {
-    setForm({ name: c.name, icon: c.icon, color: c.color, type: c.type });
+    setForm({ name: c.name, color: c.color, type: c.type });
     setEditingId(c._id);
     setShowForm(true);
   }
@@ -64,8 +63,7 @@ export default function CategoriesPage() {
     }
   }
 
-  const emojis = ["📦", "🍕", "🏠", "🚗", "🎮", "🎬", "💊", "📚", "✈️", "💰", "💼", "🛒", "☕", "🎵", "🏋️", "👕"];
-
+  const inputClass = "w-full px-4 py-2.5 rounded-xl border border-border bg-surface-alt text-text focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all";
   const expenses = data?.categories.filter((c) => c.type === "expense") || [];
   const incomes = data?.categories.filter((c) => c.type === "income") || [];
 
@@ -74,11 +72,11 @@ export default function CategoriesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold font-display text-text">Kategorie</h1>
-          <p className="text-text-muted mt-1">Zarządzaj kategoriami transakcji</p>
+          <p className="text-text-muted text-sm mt-1">Zarządzaj kategoriami transakcji</p>
         </div>
         <button
           onClick={() => { resetForm(); setShowForm(!showForm); }}
-          className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-white px-4 py-2.5 rounded-lg font-medium transition-colors"
+          className="flex items-center gap-2 bg-accent hover:bg-accent-hover text-primary px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-accent/25"
         >
           <Plus size={18} />
           Dodaj kategorię
@@ -86,66 +84,33 @@ export default function CategoriesPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-surface rounded-xl border border-border p-6 space-y-4">
-          <h2 className="text-lg font-semibold font-display text-text">
+        <form onSubmit={handleSubmit} className="bg-surface rounded-2xl border border-border p-6 space-y-4">
+          <h2 className="text-base font-semibold font-display text-text">
             {editingId ? "Edytuj kategorię" : "Nowa kategoria"}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-text mb-1">Nazwa</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-text focus:outline-none focus:ring-2 focus:ring-accent"
-                required
-              />
+              <label className="block text-sm font-medium text-text-muted mb-1.5">Nazwa</label>
+              <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputClass} required />
             </div>
             <div>
-              <label className="block text-sm font-medium text-text mb-1">Typ</label>
-              <select
-                value={form.type}
-                onChange={(e) => setForm({ ...form, type: e.target.value as "income" | "expense" })}
-                className="w-full px-4 py-2.5 rounded-lg border border-border bg-surface text-text focus:outline-none focus:ring-2 focus:ring-accent"
-              >
+              <label className="block text-sm font-medium text-text-muted mb-1.5">Typ</label>
+              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as "income" | "expense" })} className={inputClass}>
                 <option value="expense">Wydatek</option>
                 <option value="income">Przychód</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-text mb-1">Ikona</label>
-              <div className="flex flex-wrap gap-2">
-                {emojis.map((e) => (
-                  <button
-                    key={e}
-                    type="button"
-                    onClick={() => setForm({ ...form, icon: e })}
-                    className={`text-xl p-2 rounded-lg border transition-colors ${
-                      form.icon === e ? "border-accent bg-accent/10" : "border-border hover:bg-surface-alt"
-                    }`}
-                  >
-                    {e}
-                  </button>
-                ))}
+              <label className="block text-sm font-medium text-text-muted mb-1.5">Kolor</label>
+              <div className="flex items-center gap-3">
+                <input type="color" value={form.color} onChange={(e) => setForm({ ...form, color: e.target.value })} className="w-12 h-10 rounded-lg border border-border cursor-pointer bg-transparent" />
+                <span className="text-sm text-text-muted">{form.color}</span>
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-text mb-1">Kolor</label>
-              <input
-                type="color"
-                value={form.color}
-                onChange={(e) => setForm({ ...form, color: e.target.value })}
-                className="w-16 h-10 rounded-lg border border-border cursor-pointer"
-              />
             </div>
           </div>
           <div className="flex gap-3">
-            <button type="submit" className="bg-accent hover:bg-accent-hover text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
-              {editingId ? "Zapisz" : "Dodaj"}
-            </button>
-            <button type="button" onClick={resetForm} className="px-6 py-2.5 rounded-lg font-medium border border-border text-text-muted hover:bg-surface-alt transition-colors">
-              Anuluj
-            </button>
+            <button type="submit" className="bg-accent hover:bg-accent-hover text-primary px-6 py-2.5 rounded-xl font-semibold transition-all">{editingId ? "Zapisz" : "Dodaj"}</button>
+            <button type="button" onClick={resetForm} className="px-6 py-2.5 rounded-xl font-medium border border-border text-text-muted hover:bg-surface-hover transition-all">Anuluj</button>
           </div>
         </form>
       )}
@@ -157,39 +122,36 @@ export default function CategoriesPage() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {[{ title: "Wydatki", items: expenses }, { title: "Przychody", items: incomes }].map(({ title, items }) => (
-            <div key={title} className="bg-surface rounded-xl border border-border p-6">
-              <h2 className="text-lg font-semibold font-display text-text mb-4">{title}</h2>
+            <div key={title} className="bg-surface rounded-2xl border border-border p-6">
+              <h2 className="text-base font-semibold font-display text-text mb-4">{title}</h2>
               {items.length === 0 ? (
-                <p className="text-text-muted text-center py-8">Brak kategorii</p>
+                <p className="text-text-muted text-center py-8 text-sm">Brak kategorii</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1">
                   {items.map((c) => (
-                    <div key={c._id} className="flex items-center justify-between p-3 rounded-lg hover:bg-surface-alt transition-colors">
+                    <div key={c._id} className="flex items-center justify-between p-3 rounded-xl hover:bg-surface-hover transition-colors">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">{c.icon}</span>
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: c.color }} />
                         <div>
-                          <p className="font-medium text-text">{c.name}</p>
+                          <p className="font-medium text-text text-sm">{c.name}</p>
                           {c.isProtected && (
-                            <span className="text-xs text-success font-medium">🛡️ Chroniona przed cięciami</span>
+                            <span className="text-[11px] text-success font-medium">Chroniona przed cięciami</span>
                           )}
                         </div>
-                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: c.color }} />
                       </div>
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => toggleProtected(c)}
-                          className={`p-1.5 rounded-lg transition-colors ${
-                            c.isProtected ? "text-success hover:bg-success/10" : "text-text-muted hover:bg-surface-alt"
-                          }`}
-                          title={c.isProtected ? "Odznacz jako chronioną" : "Oznacz jako chronioną (doradca AI nie będzie sugerował cięć)"}
+                          className={`p-1.5 rounded-lg transition-colors ${c.isProtected ? "text-success hover:bg-success/10" : "text-text-muted hover:bg-surface-hover"}`}
+                          title={c.isProtected ? "Odznacz jako chronioną" : "Oznacz jako chronioną"}
                         >
-                          {c.isProtected ? <Shield size={16} /> : <ShieldOff size={16} />}
+                          {c.isProtected ? <Shield size={15} /> : <ShieldOff size={15} />}
                         </button>
-                        <button onClick={() => startEdit(c)} className="p-1.5 rounded-lg hover:bg-surface-alt text-text-muted hover:text-text transition-colors">
-                          <Pencil size={16} />
+                        <button onClick={() => startEdit(c)} className="p-1.5 rounded-lg hover:bg-surface-hover text-text-muted hover:text-text transition-colors">
+                          <Pencil size={15} />
                         </button>
                         <button onClick={() => deleteMutation.mutate(c._id)} className="p-1.5 rounded-lg hover:bg-danger/10 text-text-muted hover:text-danger transition-colors">
-                          <Trash2 size={16} />
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </div>

@@ -9,6 +9,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import BudgetsPage from "./pages/BudgetsPage";
 import GoalsPage from "./pages/GoalsPage";
 import AdvisorPage from "./pages/AdvisorPage";
+import HomePage from "./pages/HomePage";
 
 
 const queryClient = new QueryClient();
@@ -21,7 +22,8 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route element={<AppLayout />}>
-              <Route path="/" element={<DashboardPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/transactions" element={<TransactionsPage />} />
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/budgets" element={<BudgetsPage />} />
