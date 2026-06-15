@@ -56,6 +56,9 @@ https://github.com/user-attachments/assets/60994543-a0eb-4cbc-9c1b-b39ece26c91b
 
 https://github.com/user-attachments/assets/9cbb59c8-7e3a-4404-afad-f31adb7a9eda
 
+</br>
+
+<img width="640" height="278" alt="obserrbality" src="https://github.com/user-attachments/assets/62f8e5e5-42b7-4d5d-af9d-3d57901e5fa7" />
 
 
 ## Elementy dodatkowe
