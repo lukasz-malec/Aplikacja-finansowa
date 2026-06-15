@@ -1,5 +1,4 @@
-### Aplikacja-finansowa
-Projekt zaliczeniowy z przedmiotu "Projektowanie aplikacji internetowych"
+# Projekt zaliczeniowy z przedmiotu "Projektowanie aplikacji internetowych"
 
 ## Temat projektu
 Aplikacja webowa do zarządzania finansami osobistymi z modułem doradztwa finansowego opartym na LLM.
@@ -18,24 +17,6 @@ Pomaga użytkownikowi śledzić przychody i wydatki, planować budżet, realizow
 - **Autentykacja JWT** — rejestracja, logowanie, httpOnly cookies
 - **Observability** — Prometheus + Grafana, strukturalne logi JSON, metryki HTTP i biznesowe
 
-
-## Stos technologiczny
-
-| Warstwa | Technologia |
-|---|---|
-| Frontend | React, Vite, TypeScript, Tailwind CSS, Recharts, TanStack Query, Zustand, React Router, React Hook Form + Zod |
-| Backend | Node.js, Express, TypeScript |
-| Baza SQL | PostgreSQL + Prisma ORM |
-| Baza dokumentowa | MongoDB + Mongoose |
-| Autentykacja | JWT (httpOnly cookies) |
-| LLM | Ollama (Llama 3.2) |
-| Komunikacja real-time | Server-Sent Events (SSE) |
-| Dokumentacja API | Swagger / OpenAPI |
-| Observability | Prometheus + Grafana, strukturalne logi JSON |
-| Testy | Jest |
-| CI/CD | GitHub Actions |
-| Konteneryzacja | Docker + docker-compose |
-| Linting | Biome |
 
 
 ## Uruchomienie
@@ -77,7 +58,20 @@ https://github.com/user-attachments/assets/9cbb59c8-7e3a-4404-afad-f31adb7a9eda
 
 
 
+## Elementy dodatkowe
 
+:white_check_mark:**CI/CD** - GitHub Actions automatycznie odpala testy przy każdym pushu.</br></br>
+:white_check_mark:**Seed data** - uruchomienie pnpm seed w \backend, który tworzy użytkownika i wypełnia baze danych przykładowymi danymi</br>
+Login testowy: `jan@test.com` / `haslo123`</br></br>
+:white_check_mark:**Observability** - Prometheus/Grafana, dashboardy z wykresami, metryki Http, strukturalne logi</br></br>
+:white_check_mark:**API_DOCS/Swagger** - Dokumentacja interaktywna: `http://localhost:3000/api/docs` (Swagger)</br></br>
+:white_check_mark:**Testy**:
+- JWT (generowanie, weryfikacja, wygasanie tokenów)
+- Hashowanie haseł (bcrypt)
+- Predykcje (regresja liniowa, trendy rosnące/malejące/stabilne)
+- Plan oszczędności (chronione kategorie, limit 30% cięć, priorytetyzacja)
+- Walidacja transakcji
+- Obliczenia budżetowe
 
 
 
