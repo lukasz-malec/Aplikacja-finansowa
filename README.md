@@ -4,21 +4,6 @@
 Aplikacja webowa do zarządzania finansami osobistymi z modułem doradztwa finansowego opartym na LLM.
 Pomaga użytkownikowi śledzić przychody i wydatki, planować budżet, realizować cele oszczędnościowe oraz podejmować świadome decyzje finansowe na podstawie spersonalizowanych rekomendacji AI.
 
-
-## Funkcjonalności:
-
-- **Zarządzanie transakcjami** — dodawanie, edycja i usuwanie przychodów oraz wydatków z przypisaniem do kategorii
-- **Elastyczne kategorie** — użytkownik definiuje własne kategorie z kolorami, przechowywane w MongoDB dla pełnej elastyczności schematu
-- **Budżety** — tworzenie limitów wydatków per kategoria z monitorowaniem realizacji i podglądem transakcji
-- **Cele finansowe** — definiowanie celów oszczędnościowych z śledzeniem postępu i możliwością wpłat
-- **Dashboard analityczny** — konfigurowalne wykresy: przychody vs wydatki, wydatki wg kategorii, trendy, porównania miesięczne, realizacja budżetów, predykcje AI
-- **Doradca finansowy AI** — moduł oparty na LLM (Ollama/Llama 3.2) z predykcjami regresji liniowej, streamowaniem SSE i predefiniowanymi analizami
-- **Kategorie chronione** — użytkownik oznacza kategorie, z których nie chce rezygnować — doradca AI respektuje te preferencje przy optymalizacji budżetu
-- **Autentykacja JWT** — rejestracja, logowanie, httpOnly cookies
-- **Observability** — Prometheus + Grafana, strukturalne logi JSON, metryki HTTP i biznesowe
-
-
-
 ## Uruchomienie
 
 ### Wymagania
@@ -60,6 +45,16 @@ https://github.com/user-attachments/assets/9cbb59c8-7e3a-4404-afad-f31adb7a9eda
 
 <img width="640" height="278" alt="obserrbality" src="https://github.com/user-attachments/assets/62f8e5e5-42b7-4d5d-af9d-3d57901e5fa7" />
 
+
+
+## Wymagania minimalne
+
+✅ **R1 — Backend API** — REST API (Express + TypeScript) z 6 zasobami powiązanymi relacjami: Users, Transactions, Categories, Budgets, Goals, Analytics. Paginacja, filtrowanie, sortowanie. Endpoint SSE dla doradcy AI.</br></br>
+✅ **R2 — Baza danych** — Polyglot Persistence: PostgreSQL (Prisma ORM, migracje) dla danych relacyjnych + MongoDB (Mongoose) dla elastycznych kategorii użytkownika. Przemyślany schemat z relacjami User → Transactions, Budgets, Goals.</br></br>
+✅ **R3 — Frontend** — SPA w React + Vite + TypeScript + Tailwind CSS. Dark theme, konfigurowalne wykresy (Recharts), kafelkowa nawigacja, formularz transakcji, zarządzanie kategoriami/budżetami/celami, panel doradcy AI z streamowaniem SSE.</br></br>
+✅ **R4 — Autentykacja** — JWT w httpOnly cookies. Rejestracja, logowanie, wylogowanie. Middleware chroniący wszystkie endpointy poza auth. Rozróżnienie zalogowany/niezalogowany z przekierowaniem na stronę logowania.</br></br>
+✅ **R5 — Konteneryzacja** — `docker-compose up --build -d` uruchamia całą aplikację: PostgreSQL, MongoDB, Backend, Frontend, Prometheus, Grafana. Dockerfile dla backendu i frontendu (multi-stage build z nginx).</br></br>
+✅ **R6 — Repozytorium** — Publiczne repo na GitHub z historią commitów, README z instrukcją uruchomienia i opisem architektury, CI/CD (GitHub Actions).
 
 ## Elementy dodatkowe
 
