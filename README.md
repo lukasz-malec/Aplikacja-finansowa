@@ -4,6 +4,13 @@
 Aplikacja webowa do zarządzania finansami osobistymi z modułem doradztwa finansowego opartym na LLM.
 Pomaga użytkownikowi śledzić przychody i wydatki, planować budżet, realizować cele oszczędnościowe oraz podejmować świadome decyzje finansowe na podstawie spersonalizowanych rekomendacji AI.
 
+
+
+
+# Link do prezentacji(pdf):
+https://github.com/lukasz-malec/Aplikacja-finansowa/blob/main/Aplikacja%20bud%C5%BCetowa.pdf
+
+
 ## Uruchomienie
 
 ### Wymagania
@@ -71,8 +78,4 @@ Login testowy: `jan@test.com` / `haslo123`</br></br>
 - Walidacja transakcji
 - Obliczenia budżetowe
 
-
-
-## Link do prezentacji:
-https://github.com/lukasz-malec/Aplikacja-finansowa/blob/main/Aplikacja%20bud%C5%BCetowa.pdf
 
