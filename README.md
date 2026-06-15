@@ -67,9 +67,16 @@ Aplikacja dostępna na `http://localhost`
 
 https://github.com/user-attachments/assets/6971f570-5e12-42c2-95da-0f79f79fde6d
 
+</br>
+
+https://github.com/user-attachments/assets/60994543-a0eb-4cbc-9c1b-b39ece26c91b
+
+</br>
+
 https://github.com/user-attachments/assets/9cbb59c8-7e3a-4404-afad-f31adb7a9eda
 
-https://github.com/user-attachments/assets/60994543-a0eb-4cbc-9c1b-b39ece26c91b)
+
+
 
 
 
