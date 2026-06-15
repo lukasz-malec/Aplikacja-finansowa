@@ -73,3 +73,6 @@ Login testowy: `jan@test.com` / `haslo123`</br></br>
 
 
 
+## Link do prezentacji:
+https://github.com/lukasz-malec/Aplikacja-finansowa/blob/main/Aplikacja%20bud%C5%BCetowa.pdf
+
